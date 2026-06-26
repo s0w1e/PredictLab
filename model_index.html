@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modelle – Übersicht</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <style>
+    body { background: #0b1020; color: #e5e7eb; }
+    .card { background: rgba(17,24,39,.85); border: 1px solid rgba(255,255,255,.08); }
+    table thead th { position: sticky; top: 0; background: #111827; z-index: 10; }
+    th.sortable { cursor: pointer; user-select: none; }
+    th.sortable:hover { color: #93c5fd; }
+    .pill { background:#1f2937; border:1px solid #374151; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto p-4 md:p-6">
+    <div class="card rounded-2xl p-5 md:p-6 mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold mb-2">Modelle – Ein Blick in die Zukunft</h1>
+      <p class="text-slate-300">Sortierbare Volltabelle mit Suche, Kategorie-Filter und Detail-Links.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div class="card rounded-2xl p-4">
+        <label class="block text-sm mb-2 text-slate-300" for="search">Suche nach Name, Kategorie oder Beschreibung</label>
+        <input id="search" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-4 py-2 outline-none" placeholder="z. B. DCF, Statistik, Prognose" />
+      </div>
+
+      <div class="card rounded-2xl p-4">
+        <label class="block text-sm mb-2 text-slate-300" for="category">Kategorie</label>
+        <select id="category" class="w-full rounded-xl bg-slate-900 border border-slate-700 px-4 py-2 outline-none">
+          <option value="">Alle</option>
+          <option value="Finanzmodell">Finanzmodelle</option>
+          <option value="Mathematisches Modell">Mathematische Modelle</option>
+          <option value="Prognosemodell">Prognosemodelle</option>
+          <option value="Statistisches Modell">Statistische Modelle</option>
+          <option value="Simulationsmodell">Simulationsmodelle</option>
+        </select>
+      </div>
+
+      <div class="card rounded-2xl p-4">
+        <div class="text-sm text-slate-300 mb-2">Treffer</div>
+        <div id="count" class="text-3xl font-bold">0</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <div class="xl:col-span-2 card rounded-2xl p-4 overflow-hidden">
+        <div class="overflow-auto max-h-[70vh] rounded-xl">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b border-slate-700">
+                <th class="sortable p-3" data-key="name">Name</th>
+                <th class="sortable p-3" data-key="category">Kategorie</th>
+                <th class="sortable p-3" data-key="description">Beschreibung</th>
+                <th class="p-3">Link</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card rounded-2xl p-4">
+        <h2 class="text-lg font-semibold mb-3">Modelle pro Kategorie</h2>
+        <div id="categoryChart" class="w-full h-[420px]"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const data = [
+  { name: "DCF-Modell", category: "Finanzmodell", description: "Bewertet Unternehmen über abgezinste Cashflows", link: "modelle/dcf-modell.html" },
+  { name: "Szenariomodell", category: "Finanzmodell", description: "Vergleicht Best-, Base- und Worst-Case", link: "modelle/szenariomodell.html" },
+  { name: "Lineare Regression", category: "Mathematisches Modell", description: "Schätzt lineare Zusammenhänge zwischen Variablen", link: "modelle/lineare-regression.html" },
+  { name: "Differentialgleichung", category: "Mathematisches Modell", description: "Beschreibt dynamische Prozesse über Änderungsraten", link: "modelle/differentialgleichung.html" },
+  { name: "Monte-Carlo-Simulation", category: "Simulationsmodell", description: "Simuliert viele zufällige Verläufe für Risikoanalysen", link: "modelle/monte-carlo-simulation.html" },
+  { name: "Zeitreihenmodell", category: "Prognosemodell", description: "Prognostiziert zukünftige Werte aus historischen Daten", link: "modelle/zeitreihenmodell.html" },
+  { name: "ARIMA-Modell", category: "Prognosemodell", description: "Zeitreihenmodell für Analyse und Vorhersage", link: "modelle/arima-modell.html" },
+  { name: "Logistisches Modell", category: "Statistisches Modell", description: "Beschreibt Wahrscheinlichkeiten binärer Ereignisse", link: "modelle/logistisches-modell.html" },
+  { name: "Zinseszins", category: "Finanzmodell", description: "Zins auf Zins über Zeit", link: "modelle/zinseszins.html"}
+];
+
+let sortKey = 'name';
+let asc = true;
+
+function matchQuery(row, q) {
+  q = q.toLowerCase();
+  return ['name', 'category', 'description'].some(k => String(row[k]).toLowerCase().includes(q));
+}
+
+function render() {
+  const q = document.getElementById('search').value.trim();
+  const category = document.getElementById('category').value;
+
+  let filtered = data.filter(r => (!category || r.category === category) && (!q || matchQuery(r, q)));
+
+  filtered.sort((a, b) => {
+    const x = a[sortKey];
+    const y = b[sortKey];
+    return asc
+      ? String(x).localeCompare(String(y), 'de')
+      : String(y).localeCompare(String(x), 'de');
+  });
+
+  document.getElementById('count').textContent = filtered.length;
+
+  document.getElementById('rows').innerHTML = filtered.map(r => `
+    <tr class="border-b border-slate-800 hover:bg-slate-800/60">
+      <td class="p-3">${r.name}</td>
+      <td class="p-3">${r.category}</td>
+      <td class="p-3">${r.description}</td>
+      <td class="p-3">
+        <a href="${r.link}" class="text-sky-400 hover:text-sky-300 underline" target="_blank" rel="noopener noreferrer">
+          Öffnen
+        </a>
+      </td>
+    </tr>
+  `).join('');
+
+  const counts = {};
+  data.forEach(r => counts[r.category] = (counts[r.category] || 0) + 1);
+  const cats = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  Plotly.newPlot('categoryChart', [{
+    type: 'bar',
+    x: cats.map(d => d[0]),
+    y: cats.map(d => d[1]),
+    marker: { color: '#60a5fa' }
+  }], {
+    margin: { l: 40, r: 20, t: 10, b: 140 },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: { color: '#e5e7eb' },
+    xaxis: { tickangle: -35, automargin: true },
+    yaxis: { gridcolor: '#334155', title: 'Anzahl' }
+  }, { displayModeBar: false, responsive: true });
+}
+
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (sortKey === key) asc = !asc;
+    else { sortKey = key; asc = true; }
+    sortKey = key;
+    render();
+  });
+});
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('category').addEventListener('change', render);
+
+render();
+</script>
+</body>
+</html>
