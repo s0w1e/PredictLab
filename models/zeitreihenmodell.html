@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Zeitreihenmodell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">s
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: "Zeitreihenmodell",
+      description: "Ein Zeitreihenmodell ist ein Prognosemodell, das vergangene Daten nutzt, um zukünftige Werte vorherzusagen. Wichtig ist dabei, dass die Daten zeitlich geordnet sind. Es geht immer um Entwicklungen über die Zeit.",
+      formula: `Prognose = letzter Wert × durchschnittliche Wachstumsrate
+r = (1 / (n-1)) * Σ (y_{t+1} / y_t)
+y_{n+1} = y_n * r
+`,
+      importance: "Das Modell sucht Muster in der Vergangenheit und will Trends und langfristige Entwicklungen aufdecken (z.B. steigende Umsätze). ",
+      python: `import numpy as np
+
+data = [100, 110, 121]  # vergangene Werte
+
+# einfacher Trend (Durchschnittliches Wachstum)
+growth_rate = np.mean([data[i+1]/data[i] for i in range(len(data)-1)])
+
+# nächsten Wert prognostizieren
+next_value = data[-1] * growth_rate
+
+print(next_value)
+`
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
