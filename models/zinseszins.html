@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Modell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: "Zinseszins-Effekt",
+      description: "Der Zinseszins ist ein mathematisches Modell, das beschreibt, wie Geld im Laufe der Zeit wächst, wenn Zinsen nicht nur auf das Anfangskapital, sondern auch auf die angesammelten Zinsen berechnet werden. Das bedeutet dass eine Investition schneller wächst, weil man „Zinsen auf Zinsen“ erhält.",
+      formula: `Endkapital (A) = Startkapital (P) × (1 + Zins (r) )^Jahre (t)
+A = P * (1 + r)^t`,
+      importance: "Zinseszins ist ein grundlegendes Konzept in Finanzen, beim Investieren und in der Volkswirtschaftslehre. Es zeigt, wie kleine Wachstumsraten im Laufe der Zeit zu großen Zuwächsen führen können. Er ist ein zentrales Konzept in Finanzen, Investieren und Wirtschaft.",
+      python: `def compound_interest(P, r, t):
+    return P * (1 + r) ** t
+	
+kapital = 1000
+zins = 0.05
+jahre = 10
+	
+print(compound_interest(kapital, zins, jahre))`
+	
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
