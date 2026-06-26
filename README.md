@@ -7,7 +7,7 @@
 
 Eine einfache, modulare Sammlung von Finanz-, Prognose- und mathematischen Modellen.
 
-Die Plattform dient dazu, Modelle verständlich darzustellen – inklusive Beschreibung, Formel, Erklärung und Python-Beispiel.
+Die Plattform dient dazu, Modelle verständlich darzustellen – inklusive Beschreibung, Formel, Bedeutung und Python-Beispiel.
 
 ---
 
