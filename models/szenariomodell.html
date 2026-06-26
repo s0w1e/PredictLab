@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Szenariomodell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="../index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: "Szenariomodell",
+      description: `Ein Szenariomodell ist ein Finanzanalyse-Tool, bei dem mehrere mögliche Zukunftsszenarien (typischerweise Best Case, Base Case und Worst Case) definiert werden, um die Auswirkungen unterschiedlicher Annahmen auf Kennzahlen wie Gewinn, Cashflow oder Kapitalwert zu vergleichen.
+Es hilft, Unsicherheiten zu berücksichtigen und Entscheidungsrisiken besser einzuschätzen.`,
+      formula: `Gewinn​ = (Preis * Menge​) − Kosten
+mit s ∈ {Best,Base,Worst}}`,
+      importance: `
+	  Unternehmen erkennen, wie stark sich Ergebnisse bei verschiedenen Annahmen ändern.
+	  Entscheidungen werden robuster, da nicht nur ein „Punktwert“ betrachtet wird.
+	  Stakeholder sehen klar die Auswirkungen von Unsicherheiten.
+	  Worst-Case-Szenarien helfen, finanzielle Stabilität zu prüfen (z. B. Liquiditätsrisiken).`,
+      python: `# Szenarien definieren
+scenarios = {
+    "Best": {
+        "price": 120,
+        "quantity": 1000,
+        "fixed_costs": 20000,
+        "variable_costs_per_unit": 50,
+        "probability": 0.2
+    },
+    "Base": {
+        "price": 100,
+        "quantity": 800,
+        "fixed_costs": 20000,
+        "variable_costs_per_unit": 50,
+        "probability": 0.5
+    },
+    "Worst": {
+        "price": 80,
+        "quantity": 600,
+        "fixed_costs": 20000,
+        "variable_costs_per_unit": 50,
+        "probability": 0.3
+    }
+}
+
+# Gewinn berechnen
+results = {}
+expected_profit = 0
+
+for name, s in scenarios.items():
+    revenue = s["price"] * s["quantity"]
+    costs = s["fixed_costs"] + s["variable_costs_per_unit"] * s["quantity"]
+    profit = revenue - costs
+    
+    results[name] = profit
+    expected_profit += profit * s["probability"]
+
+# Ausgabe
+print("Gewinn je Szenario:")
+for scenario, profit in results.items():
+    print(f"{scenario}: {profit:.2f} €")
+
+print(f"\nErwarteter Gewinn: {expected_profit:.2f} €")
+`
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
