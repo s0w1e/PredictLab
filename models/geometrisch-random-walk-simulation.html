@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Geometrisch-Random-Walk-Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="../index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: `Geometrisch-Random-Walk-Simulation`,
+      description: `Ein sehr einfaches, aber in der Praxis sehr verbreitetes Modell zur Simulation des Finanzmarktes ist die Geometrisch-Random-Walk-Simulation (auch „GBM ohne Drift“ oder einfacher „Log-Rendite-Random-Walk“) für den Kurs einer einzelnen Aktie oder eines Index.
+
+Der Markt wird als zufällige Bewegung des logarithmierten Kursverlaufs abgebildet:
+
+- Jede Rendite ist eine zufällige Zahl mit mittlerer Rendite („Erwartungsrendite“) und einem Schwankungsbetrag („Volatilität“).
+
+- Die Kurse wachsen/fallen über die Zeit durch wiederholte Anwendung dieser zufälligen Renditen.`,
+      formula: `
+kurs_t = Kurs zum Zeitpunkt t
+r = durchschnittliche jährliche Rendite
+v = Volatilität
+dt = Zeit Schritt in Jahren
+Z = Zufallszahl aus Normalverteilung
+
+kurs_{t+1} = kurs_t * exp( (r - 0.5 * v^2) * dt + v * sqrt(dt) * Z )`,
+      importance: ` Beudeutung hat die Simulation z.B. bei der Risikoanalyse (Wie wahrscheinlich ist ein großer Verlust über 1 Jahr?), der Portfolioplanung (Wie entwickelt sich das Vermögen bei verschiedenen Rendite-/Volatilitätsannahmen?) oder dem Strategie-Testing (Wie würde eine bestimmte Anlagestrategie in vielen möglichen Marktverläufen funktionieren?)`,
+      python: `import numpy as np
+
+# Parameter
+S0 = 100.0      # Startkurs
+r = 0.05        # 5 % p.a.
+v = 0.20        # 20 % Volatilität p.a.
+T = 1.0         # 1 Jahr
+N_days = 252    # Handelstage
+dt = T / N_days
+
+N_sim = 5000    # Anzahl Simulationen
+
+# Zufallszahlen: Normalverteilung (0,1)
+Z = np.random.normal(0, 1, size=(N_sim, N_days))
+
+# Kursentwicklung: kurs_{t+1} = kurs_t * exp(...)
+# Das Produkt über die Tage bauen wir iterativ oder via cumulsum
+log_returns = (r - 0.5 * v**2) * dt + v * np.sqrt(dt) * Z
+log_kurs = np.log(S0) + np.cumsum(log_returns, axis=1)
+kurs = np.exp(log_kurs)
+
+# Endkurs zum Zeitpunkt T
+endkurs = kurs[:, -1]
+
+mu = np.mean(endkurs)
+p5 = np.percentile(endkurs, 5)
+p95 = np.percentile(endkurs, 95)
+
+print(f"Startkurs: {S0:.2f}")
+print(f"Erwarteter Endkurs: {mu:.2f}")
+print(f"5%-Quantil: {p5:.2f}")
+print(f"95%-Quantil: {p95:.2f}")`
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
