@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Monte-Carlo-Simulation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="../index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: "Monte-Carlo-Simulation",
+      description: "Eine Monte-Carlo-Simulation ist ein Verfahren, das mit vielen zufälligen Ziehungen mögliche Ergebnisse eines unsicheren Systems abschätzt, statt nur mit einem festen Wert zu rechnen. Sie ist besonders nützlich, wenn Eingabewerte schwanken oder exakte Lösungen schwer berechenbar sind.",
+      formula: "erwarteter_wert = (1 / N) * ( f(X_1) + f(X_2) + ... + f(X_N) )",
+      importance: "Monte-Carlo-Simulationen werden in Finance für Risikoanalyse, Preis- und Prognosemodelle genutzt, aber auch in Projektmanagement, Technik, Physik und Medizin. Ihr großer Vorteil ist, dass sie Unsicherheit sichtbar machen, zum Beispiel als Bandbreite, Wahrscheinlichkeit oder Sensitivität statt nur als Einzelwert.",
+      python: `import random
+import statistics as st
+
+N = 10000
+ergebnisse = []
+
+for _ in range(N):
+    # Beispiel: Gewinn = Umsatz - Kosten
+    umsatz = random.gauss(100, 15)   # unsicherer Umsatz
+    kosten = random.gauss(70, 10)    # unsichere Kosten
+    gewinn = umsatz - kosten
+    ergebnisse.append(gewinn)
+
+mittelwert = st.mean(ergebnisse)
+p5 = sorted(ergebnisse)[int(0.05 * N)]
+p95 = sorted(ergebnisse)[int(0.95 * N)]
+
+print(f"Erwarteter Gewinn: {mittelwert:.2f}")
+print(f"5%-Quantil: {p5:.2f}")
+print(f"95%-Quantil: {p95:.2f}")`
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
