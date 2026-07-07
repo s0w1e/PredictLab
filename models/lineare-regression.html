@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Lineare Regression</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-6">
+
+  <h1 id="title" class="text-3xl font-bold mb-4"></h1>
+
+  <h2 class="text-xl font-semibold mb-2">Beschreibung</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="description"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Formel</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <pre id="formula" class="whitespace-pre-wrap"></pre>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Warum dieses Modell wichtig ist</h2>
+  <div class="bg-slate-800 p-4 rounded-xl mb-6">
+    <p id="importance"></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">Python Beispiel</h2>
+  <pre class="bg-black p-4 rounded-xl overflow-auto"><code id="python"></code></pre>
+
+  <a id="backLink" href="../index.html" class="text-blue-400 mt-6 inline-block">← Zurück</a>
+
+  <script>
+    const model = {
+      title: "Lineare Regression",
+      description: `Die lineare Regression ist ein mathematisches Verfahren zur Vorhersage kontinuierlicher Werte anhand einer linearen Beziehung zwischen Eingabe- und Zielgrößen. Dabei wird eine Gerade (bzw. Hyperebene) gesucht, die die vorhandenen Daten möglichst gut beschreibt. Das Modell lernt die Parameter dieser Geraden, indem es den Vorhersagefehler zwischen den tatsächlichen und den berechneten Werten minimiert.`,
+      formula: "y = w*x + b",
+      importance: "Er ist ein zentrales Konzept für Vorhersagen und Prognosen im Bereich Wirtschaft, Finanzen, Investieren oder beim Maschinellen Lernen.",
+      python: `from sklearn.linear_model import LinearRegression
+
+X = [[1], [2], [3], [4], [5]]
+y = [2, 4, 6, 8, 10]
+
+model = LinearRegression()
+model.fit(X, y)
+
+prediction = model.predict([[6]])
+print(prediction)`
+    };
+
+    document.getElementById("title").textContent = model.title;
+    document.getElementById("description").textContent = model.description;
+    document.getElementById("formula").textContent = model.formula;
+    document.getElementById("importance").textContent = model.importance;
+    document.getElementById("python").textContent = model.python;
+  </script>
+</body>
+</html>
